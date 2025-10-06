@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explora y Aprende - Raíces en el Espacio</title>
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+ <style>
+/* ===== RESET Y BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* ===== VIDEO DE FONDO ===== */
+.video-fondo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: blur(8px) brightness(0.3);
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #111;
+  z-index: 2;
+  padding: 0 2rem;
+}
+
+/* Logo (izquierda) */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-left .nav-logo {
+  height: 36px;
+  width: auto;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-left .nav-logo:hover {
+  transform: scale(1.1);
+  filter: brightness(1.5);
+}
+
+/* Enlaces (centro) */
+.nav-center {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #aaa;
+}
+
+/* Botón idioma (derecha) */
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+#lang-toggle {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+  box-shadow: 0 0 12px rgba(255,255,255,0.6);
+}
+
+#lang-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 16px rgba(255,255,255,0.7);
+}
+
+/* ===== SECCIÓN PRINCIPAL ===== */
+main {
+  min-height: 100vh;
+  padding: 100px 1.25rem 3.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+  color: #fff;
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+}
+.lead {
+  color: #ccc;
+  max-width: 760px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.5;
+  font-size: 1.03rem;
+}
+
+/* ===== BARRA DE BÚSQUEDA ===== */
+.search-container {
+  margin: 1.25rem auto 2.25rem;
+  display: flex;
+  justify-content: center;
+}
+#search-input {
+  width: 300px;
+  max-width: 90%;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* ===== GRID DE BLOQUES ===== */
+.explora-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.75rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.explora-bloque {
+  background: rgba(255,255,255,0.02);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  transition: transform .22s ease, box-shadow .22s ease;
+  cursor: pointer;
+  text-align: left;
+}
+.explora-bloque:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+.explora-bloque img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+.explora-bloque:hover img { transform: scale(1.04); }
+
+.card-body { padding: 0.9rem 1rem 1.1rem; }
+.card-body h3 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+}
+.card-body p {
+  color: #ddd;
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+/* ===== ANIMACIÓN ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: all 0.7s cubic-bezier(.16,.8,.3,1);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  margin-top: 2.5rem;
+  text-align: center;
+  color: #ccc;
+  padding: 1rem 0;
+  background: rgba(0,0,0,0.35);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 680px) {
+  h1 { font-size: 1.6rem; }
+  .lead { font-size: 0.98rem; padding: 0 1rem; }
+  .explora-bloque img { height: 180px; }
+}
+
+/* PAGINACIÓN */
+.paginacion {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.paginacion button {
+  background: none;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 6px 12px;
+  margin: 0 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.paginacion button:hover,
+.paginacion button.activo {
+  background: #fff;
+  color: #000;
+}
+</style>
+
+</head>
+
+<body>
+  <!-- Video de fondo -->
+  <video class="video-fondo" autoplay muted loop playsinline>
+    <source src="fondo.mp4" type="video/mp4">
+  </video>
+
+  <!-- NAV -->
+  <nav>
+    <!-- Logo NASA (izquierda) -->
+<div class="nav-left">
+  <img src="imagenes/logonew.jpeg" alt="Logo NASA" class="nav-logo">
+  <img src="imagenes/nasa.jpeg" alt="Logo 2" class="nav-logo">
+  <img src="imagenes/sna agustin.png" alt="Logo 3" class="nav-logo">
+</div>
+
+    <div class="nav-center">
+      <a href="index.html" data-es="Inicio" data-en="Home">Inicio</a>
+      <a href="explora.html" class="activo" data-es="Explora" data-en="Explore">Explora</a>
+      <a href="index.html#equipo" data-es="Equipo" data-en="Team">Equipo</a>
+    </div>
+    <div class="nav-right">
+      <button id="lang-toggle">🌍 English</button>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main>
+    <h1 data-es="Explora y Aprende" data-en="Explore and Learn">Explora y Aprende</h1>
+    <p class="lead"
+       data-es="Descubre cómo las plantas crecen, se orientan y se adaptan incluso en entornos espaciales. Elige un tema para comenzar tu exploración científica."
+       data-en="Discover how plants grow, orient themselves, and adapt even in space environments. Choose a topic to start your scientific exploration.">
+      Descubre cómo las plantas crecen, se orientan y se adaptan incluso en entornos espaciales. Elige un tema para comenzar tu exploración científica.
+    </p>
+
+    <!-- BARRA DE BÚSQUEDA -->
+    <div class="search-container">
+      <input id="search-input" type="text" placeholder="Buscar tema..." aria-label="Buscar tema">
+    </div>
+
+    <!-- BLOQUES -->
+    <section class="explora-container">
+      <article class="explora-bloque fade-in"
+               data-es-title="Gravitropismo" data-en-title="Gravitropism"
+               data-es-text="Explora cómo las plantas orientan sus raíces hacia la gravedad, incluso fuera de la Tierra."
+               data-en-text="Explore how plants orient their roots toward gravity, even outside Earth."
+               onclick="window.location.href='tarjetas/gravitropismo.html'">
+        <img src="imagenes/gravitropismo.jpg" alt="Raíces orientándose por la gravedad">
+        <div class="card-body">
+          <h3>Gravitropismo</h3>
+          <p>Explora cómo las plantas orientan sus raíces hacia la gravedad, incluso fuera de la Tierra.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="HYDROMICRO" data-en-title="HYDROMICRO"
+               data-es-text="Predecir cómo las diferentes condiciones de humedad afectan el microbioma del polvo recogido de la Estación Espacial Internacional."
+               data-en-text="Predict how different humidity conditions affect the microbiome of dust collected from the International Space Station."
+               onclick="window.location.href='tarjetas/quiz.html'">
+        <img src="imagenes/2.jpeg" alt="Microbios y humedad">
+        <div class="card-body">
+          <h3>HYDROMICRO</h3>
+          <p>Predecir cómo las diferentes condiciones de humedad afectan el microbioma del polvo recogido de la Estación Espacial Internacional.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="MYCOBIOME-X" data-en-title="MYCOBIOME-X"
+               data-es-text="Pon a prueba tus conocimientos sobre gravitropismo y crecimiento vegetal."
+               data-en-text="Test your knowledge about gravitropism and plant growth."
+               onclick="window.location.href='tarjetas/quiz.html'">
+        <img src="imagenes/3.jpeg" alt="Quiz sobre plantas">
+        <div class="card-body">
+          <h3>MYCOBIOME-X</h3>
+          <p>Pon a prueba tus conocimientos sobre gravitropismo y crecimiento vegetal.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="MICRO-BRAIN" data-en-title="MICRO-BRAIN"
+               data-es-text="Descubre cómo los científicos estudian el comportamiento de las plantas en microgravedad."
+               data-en-text="Discover how scientists study plant behavior in microgravity."
+               onclick="window.location.href='tarjetas/experimentos.html'">
+        <img src="imagenes/4.jpeg" alt="Experimentos en microgravedad">
+        <div class="card-body">
+          <h3>MICRO-BRAIN</h3>
+          <p>Descubre cómo los científicos estudian el comportamiento de las plantas en microgravedad.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="BIOINFINITY" data-en-title="BIOINFINITY"
+               data-es-text="Explora bases de datos y resultados reales de experimentos biológicos en el espacio."
+               data-en-text="Explore databases and real results from biological experiments in space."
+               onclick="window.location.href='tarjetas/datos.html'">
+        <img src="imagenes/5.jpeg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>BIOINFINITY</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="PHOTOGENE" data-en-title="PHOTOGENE"
+               data-es-text="Base genética y molecular de la respuesta lumínica de las raíces en órbita."
+               data-en-text="Genetic and molecular basis of root light response in orbit."
+               onclick="window.location.href='tarjetas/PHOTOGENE.html'">
+        <img src="imagenes/6.jpeg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>PHOTOGENE</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="-PHOTOGENE" data-en-title="-PHOTOGENE"
+               data-es-text="Base genética y molecular de la respuesta lumínica de las raíces en órbita."
+               data-en-text="Genetic and molecular basis of root light response in orbit."
+               onclick="window.location.href='datos.html'">
+        <img src="imagenes/gravitropismo.jpg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>-PHOTOGENE</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="-PHOTOGENE" data-en-title="-PHOTOGENE"
+               data-es-text="Base genética y molecular de la respuesta lumínica de las raíces en órbita."
+               data-en-text="Genetic and molecular basis of root light response in orbit."
+               onclick="window.location.href='datos.html'">
+        <img src="imagenes/gravitropismo.jpg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>-PHOTOGENE</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="-PHOTOGENE" data-en-title="-PHOTOGENE"
+               data-es-text="Base genética y molecular de la respuesta lumínica de las raíces en órbita."
+               data-en-text="Genetic and molecular basis of root light response in orbit."
+               onclick="window.location.href='datos.html'">
+        <img src="imagenes/gravitropismo.jpg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>-PHOTOGENE</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="-PHOTOGENE" data-en-title="-PHOTOGENE"
+               data-es-text="Base genética y molecular de la respuesta lumínica de las raíces en órbita."
+               data-en-text="Genetic and molecular basis of root light response in orbit."
+               onclick="window.location.href='datos.html'">
+        <img src="imagenes/gravitropismo.jpg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>-PHOTOGENE</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="-PHOTOGENE" data-en-title="-PHOTOGENE"
+               data-es-text="Base genética y molecular de la respuesta lumínica de las raíces en órbita."
+               data-en-text="Genetic and molecular basis of root light response in orbit."
+               onclick="window.location.href='datos.html'">
+        <img src="imagenes/gravitropismo.jpg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>-PHOTOGENE</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      <article class="explora-bloque fade-in"
+               data-es-title="-PHOTOGENE" data-en-title="-PHOTOGENE"
+               data-es-text="Base genética y molecular de la respuesta lumínica de las raíces en órbita."
+               data-en-text="Genetic and molecular basis of root light response in orbit."
+               onclick="window.location.href='datos.html'">
+        <img src="imagenes/gravitropismo.jpg" alt="Bases de datos biológicas">
+        <div class="card-body">
+          <h3>-PHOTOGENE</h3>
+          <p>Explora bases de datos y resultados reales de experimentos biológicos en el espacio.</p>
+        </div>
+      </article>
+
+      
+    </section>
+  </main>
+
+  <div class="paginacion" id="paginacion"></div>
+
+
+  <footer data-es="© 2025 Raíces en el Espacio - Proyecto Educativo"
+          data-en="© 2025 Roots in Space - Educational Project">
+    © 2025 Raíces en el Espacio - Proyecto Educativo
+  </footer>
+
+  <script>
+    // ===== Animación de aparición =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.18 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ===== Cambio de idioma =====
+const langBtn = document.getElementById('lang-toggle');
+let lang = 'es';
+
+langBtn.addEventListener('click', () => {
+  lang = lang === 'es' ? 'en' : 'es';
+  langBtn.textContent = lang === 'es' ? '🌍 English' : '🌎 Español';
+
+  document.querySelectorAll('[data-es]').forEach(el => {
+    el.textContent = el.getAttribute(`data-${lang}`);
+  });
+
+  document.querySelectorAll('.explora-bloque').forEach(block => {
+    const h3 = block.querySelector('h3');
+    const p = block.querySelector('p');
+    if (h3) h3.textContent = block.getAttribute(`data-${lang}-title`);
+    if (p) p.textContent = block.getAttribute(`data-${lang}-text`);
+  });
+});
+
+// ===== PAGINACIÓN =====
+const itemsPerPage = 6; // Cantidad de tarjetas por página
+const allBlocks = Array.from(document.querySelectorAll('.explora-bloque'));
+const pagContainer = document.getElementById('paginacion');
+let currentPage = 1;
+let filteredBlocks = [...allBlocks];
+
+// FUNCIÓN PRINCIPAL: MUESTRA LA PÁGINA ACTUAL
+function mostrarPagina(page) {
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  allBlocks.forEach(b => b.style.display = 'none');
+  filteredBlocks.slice(start, end).forEach(b => b.style.display = 'block');
+  renderPagButtons(page);
+}
+
+// CREA LOS BOTONES NUMERADOS
+function renderPagButtons(page) {
+  pagContainer.innerHTML = '';
+  const totalPages = Math.ceil(filteredBlocks.length / itemsPerPage);
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    if (i === page) btn.classList.add('activo');
+    btn.addEventListener('click', () => {
+      currentPage = i;
+      mostrarPagina(currentPage);
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+    });
+    pagContainer.appendChild(btn);
+  }
+}
+
+// ===== BÚSQUEDA FUNCIONAL (actualiza la paginación) =====
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', () => {
+  const term = searchInput.value.trim().toLowerCase();
+  filteredBlocks = allBlocks.filter(block => {
+    const titleEs = block.getAttribute('data-es-title').toLowerCase();
+    const titleEn = block.getAttribute('data-en-title').toLowerCase();
+    return titleEs.includes(term) || titleEn.includes(term);
+  });
+  currentPage = 1; // reinicia a la primera página
+  mostrarPagina(currentPage);
+});
+
+// INICIO AUTOMÁTICO
+mostrarPagina(currentPage);
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raíces en el Espacio / Roots in Space</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Fondo animado -->
+  <div class="estrellas"></div>
+  <div class="estrellas2"></div>
+  <div class="estrellas3"></div>
+
+  <!-- NAV -->
+  <nav>
+    <!-- Logo NASA (izquierda) -->
+    <div class="nav-left">
+      <img src="imagenes/logonew.jpeg" alt="Logo NASA" class="nav-logo">
+      <img src="imagenes/nasa.jpeg" alt="Logo 2" class="nav-logo">
+      <img src="imagenes/sna agustin.png" alt="Logo 3" class="nav-logo">
+    </div>
+
+    <!-- Enlaces (centro) -->
+    <div class="nav-center">
+      <a href="#home" data-es="Inicio" data-en="Home">Inicio</a>
+      <a href="explora.html" data-es="Explora" data-en="Explore">Explora</a>
+      <a href="#equipo" data-es="Equipo" data-en="Team">Equipo</a>
+    </div>
+
+    <!-- Botón idioma (derecha) -->
+    <div class="nav-right">
+      <button id="lang-toggle">🌍 English</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="main-content" id="home">
+    <video autoplay muted loop playsinline>
+      <source src="Floating%20in%20Space%20[2].MP4" type="video/mp4" />
+      Tu navegador no soporta video HTML5.
+    </video>
+
+    <div class="overlay-text"
+         data-es="TNO-GROW"
+         data-en="TNO-GROW">
+      TNO-GROW
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section class="equipo-section" id="equipo">
+    <div class="equipo-container">
+      <div class="equipo-texto">
+        <h2 data-es="Sobre Nosotros" data-en="About Us">Sobre Nosotros</h2>
+        <p data-es="🌌 ¡Hola! Somos el equipo Error 504 🚀. Con mucha emoción y entusiasmo, participamos en el NASA Space Apps Challenge 2025. Somos un grupo de cinco integrantes 🌟, que hemos estado preparándonos con dedicación y pasión. Estamos orgullosos de nuestro trabajo y tenemos grandes expectativas de brillar en este desafío. ¡Acompáñanos en este viaje y descubre lo que hemos creado! 🌠✨."
+           data-en="🌌Hi! We're Team Error 504 🚀. With great excitement and enthusiasm, we're participating in the NASA Space Apps Challenge 2025. We're a group of five 🌟 members who have been preparing with dedication and passion. We're proud of our work and have high expectations of shining in this challenge. Join us on this journey and discover what we've created! 🌠✨.">
+          🌌 ¡Hola! Somos el equipo Error 504 🚀. Con mucha emoción y entusiasmo, participamos en el NASA Space Apps Challenge 2025. Somos un grupo de cinco integrantes 🌟, que hemos estado preparándonos con dedicación y pasión. Estamos orgullosos de nuestro trabajo y tenemos grandes expectativas de brillar en este desafío. ¡Acompáñanos en este viaje y descubre lo que hemos creado! 🌠✨.
+        </p>
+        <p data-es="Nuestro proyecto, 'Raíces en el Espacio', busca explicar de forma sencilla cómo las plantas sienten y responden a la gravedad, y cómo esto cambia fuera del planeta Tierra."
+           data-en="Our project, 'Roots in Space', aims to explain in a simple way how plants sense and respond to gravity, and how this changes outside planet Earth.">
+          Nuestro proyecto, 'Raíces en el Espacio', busca explicar de forma sencilla cómo las plantas sienten y responden a la gravedad, y cómo esto cambia fuera del planeta Tierra.
+        </p>
+      </div>
+
+      <div class="equipo-video">
+  <img src="imagenes/logonew.jpeg" alt="Foto del equipo" />
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Raíces en el Espacio - Proyecto Educativo
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
